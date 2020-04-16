@@ -3,12 +3,17 @@
 This is just a simple demo project to demonstrate the swagger problem with nullable fields in a API.
 
 
-### Steps to reproduce the problem:
+## Problem:
+
+Swagger doesn't generate correct documentation when using `nullable` on a field whose type is not mapped to a primitive json type. 
+
+
+## Steps to reproduce the problem:
 
 1. run the project: `./mvn spring-boot:run`
 2. go to http://localhost:8080/v3/api-docs
 
-### Example of resulting object 
+## Example of resulting object 
 
 You can go to http://localhost:8080/api and the result will be:
 
@@ -32,6 +37,18 @@ You can go to http://localhost:8080/api and the result will be:
   "nullableObjectList": null
 }
 ```
+
+Description: 
+
+* `nonNullableField` and `nullableField` have the same type and are mapped to a primitive json type (`string` in this case):
+  * `nonNullableField` **does** **not** allow `null`.
+  * `nullableField` allows `null`.
+
+* `nonNullableList` and `nullableList` are `array` of the same type and are mapped to a primitive json type (`string` in this case):
+  * `nonNullableList` **does** **not** allow `null`.
+  * `nullableList` allows `null`.
+  
+The same for `*Object` and `*ObjectList` fields. The difference is that their types are mapped to json object. 
 
 ### What is the resulting api doc?
 Only the `schemas` object:
@@ -59,19 +76,17 @@ Only the `schemas` object:
       "nonNullableList": {
         "type": "array",
         "description": "list that DOES NOT map to json object and DOES NOT allow null",
+        "nullable": true,
         "items": {
-          "type": "string",
-          "description": "list that DOES NOT map to json object and DOES NOT allow null"
-        }
+          "type": "string"
+        } 
       },
       "nullableList": {
         "type": "array",
         "description": "list that DOES NOT map to json object and allow null",
         "nullable": true,
         "items": {
-          "type": "string",
-          "description": "list that DOES NOT map to json object and allow null",
-          "nullable": true
+          "type": "string"
         }
       },
       "nonNullableObjectList": {
@@ -105,8 +120,12 @@ Only the `schemas` object:
 }
 ```
 
+As you can see, the `nullable` property was put in object definition instead of field definition. 
+The `array` fields and `string` fields (non-`object` type) are generate correctly, with `nullable` in the field itself, as expected.
+
 ### What should be the result: 
 
+The `nullable` field should be placed in field definition.
 
 ```json
 {
@@ -134,19 +153,17 @@ Only the `schemas` object:
       "nonNullableList": {
         "type": "array",
         "description": "list that DOES NOT map to json object and DOES NOT allow null",
+        "nullable": true,
         "items": {
-          "type": "string",
-          "description": "list that DOES NOT map to json object and DOES NOT allow null"
-        }
+          "type": "string"
+        } 
       },
       "nullableList": {
         "type": "array",
         "description": "list that DOES NOT map to json object and allow null",
         "nullable": true,
         "items": {
-          "type": "string",
-          "description": "list that DOES NOT map to json object and allow null",
-          "nullable": true
+          "type": "string"
         }
       },
       "nonNullableObjectList": {
@@ -163,7 +180,7 @@ Only the `schemas` object:
         "items": {
           "$ref": "#/components/schemas/MyClass"
         }
-      }
+      }      
     }
   },
   "MyClass": {

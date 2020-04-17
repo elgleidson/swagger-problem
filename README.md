@@ -76,7 +76,6 @@ Only the `schemas` object:
       "nonNullableList": {
         "type": "array",
         "description": "list that DOES NOT map to json object and DOES NOT allow null",
-        "nullable": true,
         "items": {
           "type": "string"
         } 
@@ -153,7 +152,6 @@ The `nullable` field should be placed in field definition.
       "nonNullableList": {
         "type": "array",
         "description": "list that DOES NOT map to json object and DOES NOT allow null",
-        "nullable": true,
         "items": {
           "type": "string"
         } 

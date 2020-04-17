@@ -20,7 +20,7 @@ public class MyResponse {
   @Schema(nullable = true, description = "map to json object and allows null")
   private final MyClass nullableObjectField = null;
 
-  @ArraySchema(arraySchema = @Schema(nullable = true, description = "list that DOES NOT map to json object and DOES NOT allow null"))
+  @ArraySchema(arraySchema = @Schema(nullable = false, description = "list that DOES NOT map to json object and DOES NOT allow null"))
   private final List<String> nonNullableList = List.of(nonNullableField);
 
   @ArraySchema(arraySchema = @Schema(nullable = true, description = "list that DOES NOT map to json object and allow null"))

@@ -3,9 +3,7 @@ package com.github.elgleidson.swagger.problem;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
-import lombok.Value;
 
-@Value
 public class MyResponse {
 
   @Schema(nullable = false, description = "DO NOT map to json object and DO NOT allow null")
@@ -31,5 +29,37 @@ public class MyResponse {
 
   @ArraySchema(arraySchema = @Schema(nullable = true, description = "list that map to json object and allow null"))
   private final List<MyClass> nullableObjectList = null;
+
+  public String getNonNullableField() {
+    return nonNullableField;
+  }
+
+  public String getNullableField() {
+    return nullableField;
+  }
+
+  public MyClass getNonNullableObjectField() {
+    return nonNullableObjectField;
+  }
+
+  public MyClass getNullableObjectField() {
+    return nullableObjectField;
+  }
+
+  public List<String> getNonNullableList() {
+    return nonNullableList;
+  }
+
+  public List<String> getNullableList() {
+    return nullableList;
+  }
+
+  public List<MyClass> getNonNullableObjectList() {
+    return nonNullableObjectList;
+  }
+
+  public List<MyClass> getNullableObjectList() {
+    return nullableObjectList;
+  }
 
 }

@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 
 class MyResponseTest {
 
+  static final Condition<Boolean> NOT_TRUE = new Condition<>(aBoolean -> aBoolean == null || !aBoolean, "not true");
+
   private static Map<String, Schema<?>> myResponseSchemas;
 
   @BeforeAll
@@ -98,7 +100,5 @@ class MyResponseTest {
     assertThat(fieldSchema.getType()).as("someField.type").isEqualTo("string");
     assertThat(fieldSchema.getNullable()).as("someField.nullable").is(NOT_TRUE);
   }
-
-  static final Condition<Boolean> NOT_TRUE = new Condition<>(aBoolean -> aBoolean == null || !aBoolean, "not true");
 
 }

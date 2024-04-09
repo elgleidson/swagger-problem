@@ -1,25 +1,27 @@
 package com.github.elgleidson.swagger.problem;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.core.converter.ResolvedSchema;
 import io.swagger.v3.oas.models.media.Schema;
-import java.util.Map;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MyResponseTest {
 
   static final Condition<Boolean> NOT_TRUE = new Condition<>(aBoolean -> aBoolean == null || !aBoolean, "not true");
 
+  private static ResolvedSchema resolvedSchema;
   private static Map<String, Schema<?>> myResponseSchemas;
 
   @BeforeAll
   static void setUp() {
-    ResolvedSchema resolvedSchema = ModelConverters.getInstance().resolveAsResolvedSchema(new AnnotatedType(MyResponse.class));
+    resolvedSchema = ModelConverters.getInstance().resolveAsResolvedSchema(new AnnotatedType(MyResponse.class));
     myResponseSchemas = resolvedSchema.schema.getProperties();
   }
 

@@ -17,57 +17,63 @@ class MyResponseTest {
   static final Condition<Boolean> NOT_TRUE = new Condition<>(aBoolean -> aBoolean == null || !aBoolean, "not true");
 
   private static ResolvedSchema resolvedSchema;
-  private static Map<String, Schema<?>> myResponseSchemas;
+  private static Map<String, Schema<?>> myResponseSchemaProperties;
 
   @BeforeAll
   static void setUp() {
     resolvedSchema = ModelConverters.getInstance().resolveAsResolvedSchema(new AnnotatedType(MyResponse.class));
-    myResponseSchemas = resolvedSchema.schema.getProperties();
+    myResponseSchemaProperties = resolvedSchema.schema.getProperties();
+  }
+
+  @Test
+  void requiredFields() {
+    assertThat(resolvedSchema.schema.getRequired()).as("required")
+            .containsExactlyInAnyOrder("nonNullableField", "nonNullableObjectField", "nonNullableList", "nonNullableObjectList");
   }
 
   @Test
   void nullableFieldIsNullable() {
-    Schema<?> fieldSchema = myResponseSchemas.get("nullableField");
-    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("DO NOT map to json object and allows null");
+    Schema<?> fieldSchema = myResponseSchemaProperties.get("nullableField");
+    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("DOES NOT map to json object and DOES allow null");
     assertThat(fieldSchema.getType()).as("type").isEqualTo("string");
     assertThat(fieldSchema.getNullable()).as("nullable").isTrue();
   }
 
   @Test
   void nonNullableFieldIsNotNullable() {
-    Schema<?> fieldSchema = myResponseSchemas.get("nonNullableField");
-    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("DO NOT map to json object and DO NOT allow null");
+    Schema<?> fieldSchema = myResponseSchemaProperties.get("nonNullableField");
+    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("DOES NOT map to json object and DOES NOT allow null");
     assertThat(fieldSchema.getType()).as("type").isEqualTo("string");
     assertThat(fieldSchema.getNullable()).as("nullable").is(NOT_TRUE);
   }
 
   @Test
   void nullableObjectFieldIsNullable() {
-    Schema<?> fieldSchema = myResponseSchemas.get("nullableObjectField");
-    assertThat(fieldSchema.getDescription()).as("description").isNotEqualTo("map to json object and DOES NOT allow null");
+    Schema<?> fieldSchema = myResponseSchemaProperties.get("nullableObjectField");
+    assertThat(fieldSchema.getDescription()).as("description").isNotEqualTo("DOES map to json object and DOES NOT allow null");
     assertThat(fieldSchema.get$ref()).as("$ref").isEqualTo("#/components/schemas/MyClass");
     assertThat(fieldSchema.getNullable()).as("nullable").isTrue();
   }
 
   @Test
   void nonNullableObjectFieldIsNotNullable() {
-    Schema<?> fieldSchema = myResponseSchemas.get("nonNullableObjectField");
-    assertThat(fieldSchema.getDescription()).as("description").isNotEqualTo("map to json object and allows null");
+    Schema<?> fieldSchema = myResponseSchemaProperties.get("nonNullableObjectField");
+    assertThat(fieldSchema.getDescription()).as("description").isNotEqualTo("DOES map to json object and DOES allow null");
     assertThat(fieldSchema.get$ref()).as("$ref").isEqualTo("#/components/schemas/MyClass");
     assertThat(fieldSchema.getNullable()).as("nullable").is(NOT_TRUE);
   }
 
   @Test
   void nullableListIsNullable() {
-    Schema<?> fieldSchema = myResponseSchemas.get("nullableList");
-    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("list that DOES NOT map to json object and allow null");
+    Schema<?> fieldSchema = myResponseSchemaProperties.get("nullableList");
+    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("list that DOES NOT map to json object and DOES allow null");
     assertThat(fieldSchema.getType()).as("type").isEqualTo("array");
     assertThat(fieldSchema.getNullable()).as("nullable").isTrue();
   }
 
   @Test
   void nonNullableListIsNotNullable() {
-    Schema<?> fieldSchema = myResponseSchemas.get("nonNullableList");
+    Schema<?> fieldSchema = myResponseSchemaProperties.get("nonNullableList");
     assertThat(fieldSchema.getDescription()).as("description").isEqualTo("list that DOES NOT map to json object and DOES NOT allow null");
     assertThat(fieldSchema.getType()).as("type").isEqualTo("array");
     assertThat(fieldSchema.getNullable()).as("nullable").is(NOT_TRUE);
@@ -75,26 +81,25 @@ class MyResponseTest {
 
   @Test
   void nullableObjectListIsNullable() {
-    Schema<?> fieldSchema = myResponseSchemas.get("nullableObjectList");
-    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("list that map to json object and allow null");
+    Schema<?> fieldSchema = myResponseSchemaProperties.get("nullableObjectList");
+    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("list that DOES map to json object and DOES allow null");
     assertThat(fieldSchema.getType()).as("type").isEqualTo("array");
     assertThat(fieldSchema.getNullable()).as("nullable").isTrue();
   }
 
   @Test
   void nonNullableObjectListIsNotNullable() {
-    Schema<?> fieldSchema = myResponseSchemas.get("nonNullableObjectList");
-    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("list that map to json object and DOES NOT allow null");
+    Schema<?> fieldSchema = myResponseSchemaProperties.get("nonNullableObjectList");
+    assertThat(fieldSchema.getDescription()).as("description").isEqualTo("list that DOES map to json object and DOES NOT allow null");
     assertThat(fieldSchema.getType()).as("type").isEqualTo("array");
     assertThat(fieldSchema.getNullable()).as("nullable").is(NOT_TRUE);
   }
 
   @Test
   void objectSchema() {
-    ResolvedSchema resolvedSchema = ModelConverters.getInstance().resolveAsResolvedSchema(new AnnotatedType(MyResponse.class));
     Schema<?> myClassSchema = resolvedSchema.referencedSchemas.get("MyClass");
     assertThat(myClassSchema.getDescription()).as("MyClass.description").isEqualTo("my class description");
-    assertThat(myClassSchema.getNullable()).as("MyClass.nullable").isNull();
+    assertThat(myClassSchema.getNullable()).as("MyClass.nullable").is(NOT_TRUE);
 
     Map<String, Schema> myClassFields = myClassSchema.getProperties();
     Schema<?> fieldSchema = myClassFields.get("someField");

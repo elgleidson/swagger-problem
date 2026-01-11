@@ -11,8 +11,8 @@ import lombok.Value;
 @Value
 public class MyResponse {
 
-  @NotBlank
   @Schema(nullable = false, description = "DOES NOT map to json object and DOES NOT allow null")
+  @NotNull
   String nonNullableField;
 
   @Schema(nullable = true, description = "DOES NOT map to json object and DOES allow null")
@@ -26,14 +26,14 @@ public class MyResponse {
   MyClass nullableObjectField;
 
   @ArraySchema(arraySchema = @Schema(nullable = false, description = "list that DOES NOT map to json object and DOES NOT allow null"))
-  @NotEmpty
+  @NotNull
   List<String> nonNullableList;
 
   @ArraySchema(arraySchema = @Schema(nullable = true, description = "list that DOES NOT map to json object and DOES allow null"))
   List<String> nullableList;
 
   @ArraySchema(arraySchema = @Schema(nullable = false, description = "list that DOES map to json object and DOES NOT allow null"))
-  @NotEmpty
+  @NotNull
   List<MyClass> nonNullableObjectList;
 
   @ArraySchema(arraySchema = @Schema(nullable = true, description = "list that DOES map to json object and DOES allow null"))

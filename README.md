@@ -15,7 +15,7 @@ Swagger doesn't generate correct documentation when using `nullable` on a field 
 
 ## Example of resulting object 
 
-You can go to http://localhost:8080/api and the result will be:
+You can go to http://localhost:8080/swagger-ui.html and the result will be:
 
 ```json
 {

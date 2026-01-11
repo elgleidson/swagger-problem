@@ -23,18 +23,18 @@ public class MyResponse {
   @Schema(nullable = true, description = "DOES map to json object and CAN BE null")
   MyClass nullableObjectField;
 
-  @ArraySchema(arraySchema = @Schema(nullable = false, description = "list that DOES NOT map to json object and CANNOT BE null"))
+  @ArraySchema(arraySchema = @Schema(nullable = false, description = "list whose items DO NOT map to json object and CANNOT BE null"))
 //  @NotNull
   List<String> nonNullableList;
 
-  @ArraySchema(arraySchema = @Schema(nullable = true, description = "list that DOES NOT map to json object and CAN BE null"))
+  @ArraySchema(arraySchema = @Schema(nullable = true, description = "list whose items DO NOT map to json object and CAN BE null"))
   List<String> nullableList;
 
-  @ArraySchema(arraySchema = @Schema(nullable = false, description = "list that DOES map to json object and CANNOT BE null"))
+  @ArraySchema(arraySchema = @Schema(nullable = false, description = "list whose items DO map to json object and CANNOT BE null"))
 //  @NotNull
   List<MyClass> nonNullableObjectList;
 
-  @ArraySchema(arraySchema = @Schema(nullable = true, description = "list that DOES map to json object and CAN BE null"))
+  @ArraySchema(arraySchema = @Schema(nullable = true, description = "list whose items DO map to json object and CAN BE null"))
   List<MyClass> nullableObjectList;
 
 }

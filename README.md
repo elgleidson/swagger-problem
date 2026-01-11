@@ -57,55 +57,49 @@ Only the `schemas` object:
     "properties": {
       "nonNullableField": {
         "type": "string",
-        "description": "DOES NOT map to json object and DOES NOT allow null"
+        "description": "DOES NOT map to json object and CANNOT BE null"
       },
       "nullableField": {
         "type": "string",
-        "description": "DOES NOT map to json object and DOES allow null"
+        "description": "DOES NOT map to json object and CAN BE null"
       },
       "nonNullableObjectField": {
         "$ref": "#/components/schemas/MyClass",
-        "description": "DOES map to json object and DOES NOT allow null"
+        "description": "DOES map to json object and CANNOT BE null"
       },
       "nullableObjectField": {
         "$ref": "#/components/schemas/MyClass",
-        "description": "DOES map to json object and DOES allow null"
+        "description": "DOES map to json object and CAN BE null"
       },
       "nonNullableList": {
         "type": "array",
-        "description": "list that DOES NOT map to json object and DOES NOT allow null",
+        "description": "list that DOES NOT map to json object and CANNOT BE null",
         "items": {
           "type": "string"
         }
       },
       "nullableList": {
         "type": "array",
-        "description": "list that DOES NOT map to json object and DOES allow null",
+        "description": "list that DOES NOT map to json object and CAN BE null",
         "items": {
           "type": "string"
         }
       },
       "nonNullableObjectList": {
         "type": "array",
-        "description": "list that DOES map to json object and DOES NOT allow null",
+        "description": "list that DOES map to json object and CANNOT BE null",
         "items": {
           "$ref": "#/components/schemas/MyClass"
         }
       },
       "nullableObjectList": {
         "type": "array",
-        "description": "list that DOES map to json object and DOES allow null",
+        "description": "list that DOES map to json object and CAN BE null",
         "items": {
           "$ref": "#/components/schemas/MyClass"
         }
       }
-    },
-    "required": [
-      "nonNullableField",
-      "nonNullableList",
-      "nonNullableObjectField",
-      "nonNullableObjectList"
-    ]
+    }
   },
   "MyClass": {
     "type": "object",
@@ -120,8 +114,21 @@ Only the `schemas` object:
 }
 ```
 
-As you can see, the `nullable` property was put in object definition instead of field definition. 
-The `array` fields and `string` fields (non-`object` type) are generate correctly, with `nullable` in the field itself, as expected.
+As you can see, the `nullable` property is missing completely.
+
+If you uncomment the Jakarta's `@NotNull` annotation you'll have the same result, but there will be an `required` array with all non-nullable fields.
+```json
+{
+  "MyResponse": {
+    ...
+    "required": [
+      "nonNullableField",
+      "nonNullableList",
+      "nonNullableObjectField",
+      "nonNullableObjectList"
+    ]
+  }
+```
 
 ### What should be the result: 
 
@@ -134,32 +141,32 @@ The `nullable` field should be placed in field definition.
     "properties": {
       "nonNullableField": {
         "type": "string",
-        "description": "DOES NOT map to json object and DOES NOT allow null"
+        "description": "DOES NOT map to json object and CANNOT BE null"
       },
       "nullableField": {
         "type": "string",
-        "description": "DOES NOT map to json object and DOES allow null",
+        "description": "DOES NOT map to json object and CAN BE null",
         "nullable": true
       },
       "nonNullableObjectField": {
         "$ref": "#/components/schemas/MyClass",
-        "description": "DOES map to json object and DOES NOT allow null"
+        "description": "DOES map to json object and CANNOT BE null"
       },
       "nullableObjectField": {
         "$ref": "#/components/schemas/MyClass",
-        "description": "DOES map to json object and DOES allow null",
+        "description": "DOES map to json object and CAN BE null",
         "nullable": true
       },
       "nonNullableList": {
         "type": "array",
-        "description": "list that DOES NOT map to json object and DOES NOT allow null",
+        "description": "list that DOES NOT map to json object and CANNOT BE null",
         "items": {
           "type": "string"
         }
       },
       "nullableList": {
         "type": "array",
-        "description": "list that DOES NOT map to json object and DOES allow null",
+        "description": "list that DOES NOT map to json object and CAN BE null",
         "items": {
           "type": "string"
         },
@@ -167,26 +174,20 @@ The `nullable` field should be placed in field definition.
       },
       "nonNullableObjectList": {
         "type": "array",
-        "description": "list that DOES map to json object and DOES NOT allow null",
+        "description": "list that DOES map to json object and CANNOT BE null",
         "items": {
           "$ref": "#/components/schemas/MyClass"
         }
       },
       "nullableObjectList": {
         "type": "array",
-        "description": "list that DOES map to json object and DOES allow null",
+        "description": "list that DOES map to json object and CAN BE null",
         "items": {
           "$ref": "#/components/schemas/MyClass"
         },
         "nullable": true
       }
-    },
-    "required": [
-      "nonNullableField",
-      "nonNullableList",
-      "nonNullableObjectField",
-      "nonNullableObjectList"
-    ]
+    }
   },
   "MyClass": {
     "type": "object",
